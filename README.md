@@ -1,10 +1,10 @@
 # Gomall
-[中文](README_cn.md)
+[EN](README.md)
 
-This is a teaching project for newbie using CloudWeGo
+新人学习 CloudWeGo 的教学项目
 
-## Technology Stack
-| technology | introduce |
+## 技术栈
+| 技术            | 介绍 |
 |---------------|----|
 | cwgo          | -  |
 | kitex         | -  |
@@ -17,23 +17,22 @@ This is a teaching project for newbie using CloudWeGo
 | Jaeger        | -  |
 | Docker        | -  |
 
+## 业务逻辑
+- [x] 页面访问认证检查
+- [x] 注册
+- [x] 登录
+- [x] 退出
+- [x] 产品分类
+- [x] 产品
+- [x] 加购
+- [x] 购物车数量角标
+- [x] 下单
+- [x] 支付
+- [x] 订单中心
 
-## Biz Logic
-- [x] The pages check auth
-- [x] Register
-- [x] Login
-- [x] Logout
-- [x] Product categories
-- [x] Products
-- [x] Add to cart
-- [x] The number badge of cart products
-- [x] Checkout
-- [x] Payment
-- [x] Orders center
-
-## How to use
-### Prepare 
-List required
+## 如何使用
+### 准备
+必备清单
 - Go
 - IDE / Code Editor
 - Docker
@@ -42,47 +41,47 @@ List required
 - [Air](https://github.com/cosmtrek/air)
 - ...
 
-### Clone code
+### 克隆项目
 ```
 git clone ...
 ```
 
-### Copy `.env` file
+### 拷贝 `.env` 文件
 ```
 make init
 ```
-*Note:*`You must generate and input SESSION_SECRET random value for session`
-
-### Download go module
+*Note:*`在微服务frontend的环境变量中，必须生成并输入 SESSION_SECRET 值供 session 功能正常使用`
+*Note:*`必须配置微服务payment的环境变量，接入真实支付环境`
+### 下载 Go 依赖
 ```
 make tidy
 ```
-
-### Start Docker Compose
+### 启动容器
 ```
 make env-start
 ```
 if you want to stop their docker application,you can run `make env-stop`.
 
-### Run Service
-This cmd must appoint a service.
+### 启动某服务
+该命令必须执行一个服务
 
-*Note:* `Run the Go server using air. So it must be installed`
+*注意:* `我们使用 air 运行并热加载，必须先安装好`
 ```
 make run svc=`svcName`
 ```
-### View Gomall Website
+*Note:*`frontend服务监听的端口为8080，payment服务监听的端口为8089，需要放行这两个端口`
+### 浏览 Gomall 站点
 ```
 make open-gomall
 ```
-### Check Registry
+### 查看注册中心
 ```
 make open-consul
 ```
-### Make Usage
+### Make 用法
 ```
 make
 ```
-## Contributors
+## 贡献者
 - [rogerogers](https://github.com/rogerogers)
 - [baiyutang](https://github.com/baiyutang)
