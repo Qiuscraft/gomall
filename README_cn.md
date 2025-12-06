@@ -50,12 +50,12 @@ git clone ...
 ```
 make init
 ```
-*Note:*`必须生成并输入 SESSION_SECRET 值供 session 功能正常使用`
+*Note:*`在微服务frontend的环境变量中，必须生成并输入 SESSION_SECRET 值供 session 功能正常使用`
+*Note:*`必须配置微服务payment的环境变量，接入真实支付环境`
 ### 下载 Go 依赖
 ```
 make tidy
 ```
-
 ### 启动容器
 ```
 make env-start
@@ -69,6 +69,7 @@ if you want to stop their docker application,you can run `make env-stop`.
 ```
 make run svc=`svcName`
 ```
+*Note:*`frontend服务监听的端口为8080，payment服务监听的端口为8089，需要放行这两个端口`
 ### 浏览 Gomall 站点
 ```
 make open-gomall
