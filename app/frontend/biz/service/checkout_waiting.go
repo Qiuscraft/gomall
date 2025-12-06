@@ -37,7 +37,7 @@ func NewCheckoutWaitingService(Context context.Context, RequestContext *app.Requ
 
 func (h *CheckoutWaitingService) Run(req *checkout.CheckoutReq) (resp map[string]any, err error) {
 	userId := frontendutils.GetUserIdFromCtx(h.Context)
-	_, err = rpc.CheckoutClient.Checkout(h.Context, &rpccheckout.CheckoutReq{
+	checkoutResp, err := rpc.CheckoutClient.Checkout(h.Context, &rpccheckout.CheckoutReq{
 		UserId:    userId,
 		Email:     req.Email,
 		Firstname: req.Firstname,
@@ -60,8 +60,14 @@ func (h *CheckoutWaitingService) Run(req *checkout.CheckoutReq) (resp map[string
 		return nil, err
 	}
 
+	redirect := "/checkout/result"
+	if checkoutResp != nil && checkoutResp.PayUrl != "" {
+		// 返回第三方支付页面，等待用户完成支付
+		redirect = checkoutResp.PayUrl
+	}
+
 	return utils.H{
 		"title":    "waiting",
-		"redirect": "/checkout/result",
+		"redirect": redirect,
 	}, nil
 }

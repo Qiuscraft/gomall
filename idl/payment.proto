@@ -25,4 +25,5 @@ message ChargeReq {
 
 message ChargeResp {
   string transaction_id = 1;
+  string pay_url = 2;
 }

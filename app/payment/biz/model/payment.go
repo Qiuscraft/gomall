@@ -26,6 +26,9 @@ type PaymentLog struct {
 	UserId        uint32    `json:"user_id"`
 	OrderId       string    `json:"order_id"`
 	TransactionId string    `json:"transaction_id"`
+	ProviderOrder string    `json:"provider_order"`
+	PayURL        string    `json:"pay_url"`
+	Status        string    `json:"status"`
 	Amount        uint64    `json:"amount"`
 	PayAt         time.Time `json:"pay_at"`
 }
@@ -36,4 +39,25 @@ func (p PaymentLog) TableName() string {
 
 func CreatePaymentLog(db *gorm.DB, ctx context.Context, payment *PaymentLog) error {
 	return db.WithContext(ctx).Model(&PaymentLog{}).Create(payment).Error
+}
+
+func GetPaymentLogByOrderID(db *gorm.DB, ctx context.Context, orderID string) (*PaymentLog, error) {
+	var p PaymentLog
+	err := db.WithContext(ctx).Model(&PaymentLog{}).Where("order_id = ?", orderID).First(&p).Error
+	if err != nil {
+		return nil, err
+	}
+	return &p, nil
+}
+
+func MarkPaymentPaid(db *gorm.DB, ctx context.Context, orderID, transactionID, providerOrder, payURL string, payAt time.Time) error {
+	return db.WithContext(ctx).Model(&PaymentLog{}).
+		Where("order_id = ?", orderID).
+		Updates(map[string]any{
+			"transaction_id": transactionID,
+			"provider_order": providerOrder,
+			"pay_url":        payURL,
+			"status":         "paid",
+			"pay_at":         payAt,
+		}).Error
 }

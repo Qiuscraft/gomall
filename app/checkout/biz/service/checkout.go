@@ -156,17 +156,11 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 	_ = mq.Nc.PublishMsg(msg)
 
 	klog.Info(paymentResult)
-	// change order state
-	klog.Info(orderResult)
-	_, err = rpc.OrderClient.MarkOrderPaid(s.ctx, &order.MarkOrderPaidReq{UserId: req.UserId, OrderId: orderId})
-	if err != nil {
-		klog.Error(err)
-		return
-	}
 
 	resp = &checkout.CheckoutResp{
 		OrderId:       orderId,
 		TransactionId: paymentResult.TransactionId,
+		PayUrl:        paymentResult.PayUrl,
 	}
 	return
 }

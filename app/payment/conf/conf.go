@@ -125,3 +125,11 @@ func LogLevel() klog.Level {
 		return klog.LevelInfo
 	}
 }
+
+func GetEnvNotifyURL() string {
+	return os.Getenv("ZHIFUFM_NOTIFY_URL")
+}
+
+func GetSecretKey() string {
+	return os.Getenv("ZHIFUFM_SECRET_KEY")
+}

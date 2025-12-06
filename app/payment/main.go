@@ -15,12 +15,15 @@
 package main
 
 import (
+	"context"
 	"net"
 	"strings"
 
 	"github.com/cloudwego/biz-demo/gomall/app/payment/biz/dal"
 	"github.com/cloudwego/biz-demo/gomall/app/payment/conf"
+	"github.com/cloudwego/biz-demo/gomall/app/payment/infra/rpc"
 	"github.com/cloudwego/biz-demo/gomall/app/payment/middleware"
+	"github.com/cloudwego/biz-demo/gomall/app/payment/notify"
 	"github.com/cloudwego/biz-demo/gomall/common/mtl"
 	"github.com/cloudwego/biz-demo/gomall/common/serversuite"
 	"github.com/cloudwego/biz-demo/gomall/common/utils"
@@ -44,7 +47,16 @@ func main() {
 	mtl.InitTracing(serviceName)
 	mtl.InitMetric(serviceName, conf.GetConf().Kitex.MetricsPort, conf.GetConf().Registry.RegistryAddress[0])
 	dal.Init()
+	rpc.InitClient()
 	opts := kitexInit()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	go func() {
+		if err := notify.Start(ctx); err != nil {
+			klog.Error(err)
+		}
+	}()
 
 	svr := paymentservice.NewServer(new(PaymentServiceImpl), opts...)
 
