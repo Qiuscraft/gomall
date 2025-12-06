@@ -69,7 +69,7 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 	}
 	var (
 		oi    []*order.OrderItem
-		total float32
+		total uint64
 	)
 	for _, cartItem := range cartResult.Cart.Items {
 		productResp, resultErr := rpc.ProductClient.GetProduct(s.ctx, &product.GetProductReq{Id: cartItem.ProductId})
@@ -82,7 +82,7 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 			continue
 		}
 		p := productResp.Product
-		cost := p.Price * float32(cartItem.Quantity)
+		cost := p.Price * uint64(cartItem.Quantity)
 		total += cost
 		oi = append(oi, &order.OrderItem{
 			Item: &cart.CartItem{ProductId: cartItem.ProductId, Quantity: cartItem.Quantity},

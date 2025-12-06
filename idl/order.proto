@@ -31,7 +31,7 @@ message PlaceOrderReq {
 
 message OrderItem {
   cart.CartItem item = 1;
-  float cost = 2;
+  uint64 cost = 2;
 }
 
 message OrderResult {

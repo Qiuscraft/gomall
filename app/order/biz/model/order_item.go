@@ -19,7 +19,7 @@ type OrderItem struct {
 	ProductId    uint32
 	OrderIdRefer string `gorm:"size:256;index"`
 	Quantity     int32
-	Cost         float32
+	Cost         uint64
 }
 
 func (oi OrderItem) TableName() string {

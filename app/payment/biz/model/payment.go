@@ -26,7 +26,7 @@ type PaymentLog struct {
 	UserId        uint32    `json:"user_id"`
 	OrderId       string    `json:"order_id"`
 	TransactionId string    `json:"transaction_id"`
-	Amount        float32   `json:"amount"`
+	Amount        uint64    `json:"amount"`
 	PayAt         time.Time `json:"pay_at"`
 }
 

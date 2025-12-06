@@ -123,7 +123,7 @@ func (x *Product) fastReadField4(buf []byte, _type int8) (offset int, err error)
 }
 
 func (x *Product) fastReadField5(buf []byte, _type int8) (offset int, err error) {
-	x.Price, offset, err = fastpb.ReadFloat(buf, _type)
+	x.Price, offset, err = fastpb.ReadUint64(buf, _type)
 	return offset, err
 }
 
@@ -360,7 +360,7 @@ func (x *Product) fastWriteField5(buf []byte) (offset int) {
 	if x.Price == 0 {
 		return offset
 	}
-	offset += fastpb.WriteFloat(buf[offset:], 5, x.GetPrice())
+	offset += fastpb.WriteUint64(buf[offset:], 5, x.GetPrice())
 	return offset
 }
 
@@ -541,7 +541,7 @@ func (x *Product) sizeField5() (n int) {
 	if x.Price == 0 {
 		return n
 	}
-	n += fastpb.SizeFloat(5, x.GetPrice())
+	n += fastpb.SizeUint64(5, x.GetPrice())
 	return n
 }
 

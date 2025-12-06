@@ -2,7 +2,6 @@ package order
 
 import (
 	"context"
-
 	order "github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/order"
 
 	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/order/orderservice"

@@ -44,7 +44,7 @@ func (h *CheckoutService) Run(req *checkout.CheckoutReq) (resp map[string]any, e
 	if err != nil {
 		return nil, err
 	}
-	var total float32
+	var total uint64
 	for _, v := range carts.Cart.Items {
 		productResp, err := rpc.ProductClient.GetProduct(h.Context, &rpcproduct.GetProductReq{Id: v.ProductId})
 		if err != nil {
@@ -56,17 +56,17 @@ func (h *CheckoutService) Run(req *checkout.CheckoutReq) (resp map[string]any, e
 		p := productResp.Product
 		items = append(items, map[string]string{
 			"Name":    p.Name,
-			"Price":   strconv.FormatFloat(float64(p.Price), 'f', 2, 64),
+			"Price":   frontendutils.FormatPrice(p.Price * 100),
 			"Picture": p.Picture,
 			"Qty":     strconv.Itoa(int(v.Quantity)),
 		})
-		total += float32(v.Quantity) * p.Price
+		total += uint64(v.Quantity) * p.Price * 100
 	}
 
 	return utils.H{
 		"title":    "Checkout",
 		"items":    items,
 		"cart_num": len(items),
-		"total":    strconv.FormatFloat(float64(total), 'f', 2, 64),
+		"total":    frontendutils.FormatPrice(total),
 	}, nil
 }

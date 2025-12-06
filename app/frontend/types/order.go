@@ -29,7 +29,7 @@ type Order struct {
 	OrderId     string
 	CreatedDate string
 	OrderState  string
-	Cost        float32
+	Cost        uint64
 	Items       []OrderItem
 }
 
@@ -38,5 +38,5 @@ type OrderItem struct {
 	ProductName string
 	Picture     string
 	Qty         uint32
-	Cost        float32
+	Cost        uint64
 }

@@ -53,7 +53,7 @@ func (h *OrderListService) Run(req *common.Empty) (resp map[string]any, err erro
 
 	for _, v := range listOrderResp.Orders {
 		var items []types.OrderItem
-		var total float32
+		var total uint64
 		if len(v.OrderItems) > 0 {
 			for _, vv := range v.OrderItems {
 				total += vv.Cost

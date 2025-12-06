@@ -81,7 +81,7 @@ func initProductClient() {
 		return &product.ListProductsResp{
 			Products: []*product.Product{
 				{
-					Price:       6.6,
+					Price:       660,
 					Id:          3,
 					Picture:     "/static/image/t-shirt.jpeg",
 					Name:        "T-Shirt",

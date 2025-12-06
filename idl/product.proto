@@ -22,7 +22,7 @@ message Product {
   string name = 2;
   string description = 3;
   string picture = 4;
-  float price = 5;
+  uint64 price = 5;
 
   repeated string categories = 6;
 }
