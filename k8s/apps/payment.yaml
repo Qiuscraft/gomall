@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment
+  template:
+    metadata:
+      labels:
+        app: payment
+    spec:
+      containers:
+        - name: payment
+          image: gomall-payment:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8884
+          env:
+            - name: GO_ENV
+              value: k8s
+            - name: MYSQL_HOST
+              value: mysql
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              value: root
+            - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+              value: http://jaeger:4317
+            - name: ZHIFUFM_NOTIFY_URL
+              value: http://frontend:8080/payment/notify
+            - name: ZHIFUFM_RETURN_URL
+              value: http://frontend:8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment
+spec:
+  selector:
+    app: payment
+  ports:
+    - name: rpc
+      port: 8884
+      targetPort: 8884
