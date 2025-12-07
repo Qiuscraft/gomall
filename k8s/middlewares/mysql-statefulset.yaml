@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  serviceName: mysql-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root"  # 与Docker Compose保持一致的root密码
+        - name: MYSQL_DATABASE
+          value: "gomall"
+        volumeMounts:
+        - name: mysql-data
+          mountPath: /var/lib/mysql  # MySQL数据存储路径
+        - name: init-scripts
+          mountPath: /docker-entrypoint-initdb.d  # 初始化脚本挂载路径
+          readOnly: true
+      volumes:
+      - name: init-scripts
+        configMap:
+          name: mysql-init-scripts
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: mysql-local

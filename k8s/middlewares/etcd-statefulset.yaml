@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: etcd
+spec:
+  serviceName: etcd-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app: etcd
+  template:
+    metadata:
+      labels:
+        app: etcd
+    spec:
+      containers:
+      - name: etcd
+        image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/bitnami/etcd:3.5
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: ETCD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: ALLOW_NONE_AUTHENTICATION
+          value: "yes"
+        - name: ETCD_ADVERTISE_CLIENT_URLS
+          value: http://etcd:2379
+        - name: ETCD_LISTEN_CLIENT_URLS
+          value: http://0.0.0.0:2379
+        - name: ETCD_LISTEN_PEER_URLS
+          value: http://0.0.0.0:2380
+        - name: ETCD_INITIAL_ADVERTISE_PEER_URLS
+          value: http://etcd-0.etcd-headless:2380
+        - name: ETCD_INITIAL_CLUSTER
+          value: etcd-0=http://etcd-0.etcd-headless:2380
+        - name: ETCD_INITIAL_CLUSTER_STATE
+          value: new
+        ports:
+        - name: client
+          containerPort: 2379
+          protocol: TCP
+        - name: peer
+          containerPort: 2380
+          protocol: TCP
+        volumeMounts:
+        - name: data
+          mountPath: /etcd-data
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+      storageClassName: standard

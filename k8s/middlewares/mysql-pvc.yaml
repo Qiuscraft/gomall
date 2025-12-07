@@ -1,0 +1,3 @@
+# The MySQL StatefulSet requests its own PersistentVolumeClaim through the
+# volumeClaimTemplates section. This file is intentionally left without a
+# manifest to avoid creating an extra, unused claim.
